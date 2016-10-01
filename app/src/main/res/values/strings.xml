@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">FormTemplates</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="navigation_item_1">LoginForms</string>
+    <string name="navigation_item_2">SimpleLogin</string>
+    <string name="navigation_item_3">LoginType2</string>
+    <string name="navigation_item_6">LoginType3</string>
+    <string name="navigation_item_4">MultiForms</string>
+    <string name="navigation_item_5">Registration</string>
+    <string name="navigation_item_7">EditableForm</string>
+    <string name="navigation_item_8">DBForm</string>
+    <string name="navigation_item_9">ResetPassword</string>
+    <string name="navigation_item_10">ResetPassword</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in </string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="facebookloginTitle">facebook</string>
+    <string name="twitter_username">Username or email</string>
+    <string name="twitter_password">Password</string>
+    <string name="twitter_check_text">Upload my address book to connect me with my friends</string>
+    <string name="twitter_button_name">Sign In</string>
+    <string name="twitter_forgot_password_label">Forgot password ?</string>
+    <string name="twitter_footer_text">Your email address and phone number may be used to connect you with others,but will not be visible anywhere.You can update this in account settings</string>
+    <string name="facebook_type">FaceBookType</string>
+    <string name="twitter_type">TwitterType</string>
+    <string name="yahoo_type">YahooType</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="navigation_item_11">FacebookType</string>
+    <string name="navigation_item_12">TwitterType</string>
+    <string name="navigation_item_14">YahooType</string>
+    <string name="navigation_item15">SocialLogin</string>
+    <string name="navigation_item_16">SocialLoginForm</string>
+    <string name="navigation_item17">FireBaseProfileForms</string>
+    <string name="navigation_item_18">UserProfile</string>
+
+
+    <string name="facebook_app_id">1060892510675347</string>
+    <string name="navigation_item_19">SocialLoginType2</string>
+    <string name="navigation_item20">FireBaseForms</string>
+    <string name="navigation_item_21">FireBaseRegistration</string>
+    <string name="navigation_item_22">FireBaseLogin</string>
+    <string name="prepopulate_firebase_form">Prepopulated</string>
+    <string name="firebase_image_upload">ProfileImageUpload</string>
+</resources>

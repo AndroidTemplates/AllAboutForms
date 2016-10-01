@@ -1,0 +1,100 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    android:background="#f3f3f3"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/twitter_username" 
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/twitter_uname"
+        ></EditText>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/twitter_password"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/twitter_pwd"
+        ></EditText>
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#e9e9e9"
+        >
+           <CheckedTextView 
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="@string/twitter_check_text"
+               android:id="@+id/twitter_checked_label"
+               android:textSize="15sp"
+             android:textColor="@color/black"
+            android:textStyle="bold"
+               android:gravity="center_vertical"
+               android:checked="true"
+               android:clickable="true"
+               android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
+               />
+            
+            
+       <Button
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/twitter_btn"
+           android:text="@string/twitter_button_name"
+           android:gravity="center" 
+           android:textColor="@color/white"
+           android:clickable="false"
+           android:textStyle="bold"
+           />
+       <RelativeLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           >
+           <TextView 
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="@string/twitter_forgot_password_label"
+               android:layout_centerInParent="true"
+              />
+           <ImageView 
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@drawable/ic_action_system_config_services"
+               android:scaleType="fitXY"
+               android:layout_alignParentRight="true"
+               />
+           
+           
+           
+       </RelativeLayout>
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="@string/twitter_footer_text"
+            
+           />
+        
+    </LinearLayout>
+    
+
+</LinearLayout>

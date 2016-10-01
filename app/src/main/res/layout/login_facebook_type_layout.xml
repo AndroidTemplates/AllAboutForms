@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightblue"
+    android:orientation="vertical"
+    android:weightSum="6"
+    >
+    
+        <LinearLayout
+         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="vertical"
+       
+        >
+        </LinearLayout>
+    <LinearLayout
+         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical"
+       
+        >
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/facebookloginTitle"
+        android:id="@+id/title"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif"
+        android:textSize="35sp"
+        android:gravity="center|center_vertical"
+        
+        ></TextView>
+ </LinearLayout> 
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     android:orientation="vertical"
+    android:layout_weight="1"
+        android:focusable="true"
+    android:focusableInTouchMode="true"
+    >
+    
+            <EditText
+            android:id="@+id/txtUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:hint="User name"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:background="@drawable/edstyle" />
+         
+
+        
+        <EditText
+            android:id="@+id/txtPassword"
+            android:paddingLeft="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:inputType="textPassword" 
+             android:hint="Password"
+            android:background="@drawable/edstyle"
+            />
+
+        <Button
+           android:id="@+id/buttonSignIn"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginLeft="10dp"
+           android:layout_marginRight="10dp"
+           android:layout_marginTop="10dp"
+           android:text="Log In"
+           android:textColor="#FFFFFF"
+           android:background="@drawable/buttonstyle"
+            />
+    
+</LinearLayout>   
+</LinearLayout>
+
+<!-- 
+                  <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:text="One Mobile Studio"
+        android:id="@+id/title"
+        android:layout_centerHorizontal="true"
+        ></TextView>
+ -->

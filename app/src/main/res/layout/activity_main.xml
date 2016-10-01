@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/app_toolbar"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/MyDarkToolbarStyle"
+        app:titleTextAppearance="@style/ToolbarTitle"
+        ></android.support.v7.widget.Toolbar>
+    <android.support.v4.widget.DrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/drawer_layout"
+        tools:context="list.listtemplates.MainActivity">
+
+
+
+        <FrameLayout
+            android:id="@+id/frag_parentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/main_nav_view_drawer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:itemIconTint="@color/colorAccent"
+            app:itemTextColor="@color/colorTextSecondary"
+
+            app:menu = "@menu/drawer_menu"
+            ></android.support.design.widget.NavigationView>
+
+
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>
+
+    <!--
+    app:headerLayout="@layout/drawer_header" -->
