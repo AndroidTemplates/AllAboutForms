@@ -32,6 +32,7 @@ email
     private String mobile;
     private String mobile2;
     private String email;
+    private String downloadURI;
 
     public Profile(){
 
@@ -139,5 +140,13 @@ email
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getDownloadURI() {
+        return downloadURI;
+    }
+
+    public void setDownloadURI(String downloadURI) {
+        this.downloadURI = downloadURI;
     }
 }

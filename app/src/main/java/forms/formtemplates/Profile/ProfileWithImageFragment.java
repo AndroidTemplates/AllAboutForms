@@ -3,6 +3,7 @@ package forms.formtemplates.Profile;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -10,10 +11,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,6 +29,8 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -50,7 +55,7 @@ public class ProfileWithImageFragment extends Fragment implements View.OnClickLi
     private String mParam1;
     private String mParam2;
 
-    Firebase mRef;
+   // Firebase mRef;
     View profileView = null;
 
     Button submit,dob;
@@ -64,9 +69,9 @@ public class ProfileWithImageFragment extends Fragment implements View.OnClickLi
     private static final int REQUEST_WRITE_STORAGE = 112;
 
     private static final int REQUEST_READ_STORAGE = 113;
-
-
-Uri downLoadUri = null;
+    Uri downLoadUri = null;
+    private DatabaseReference mDataBaseReference;
+    Uri uri =null;
     public ProfileWithImageFragment() {
         // Required empty public constructor
     }
@@ -91,7 +96,8 @@ Uri downLoadUri = null;
 
     private  void initFireBaseURL(){
         mstoreRef = FirebaseStorage.getInstance().getReference();
-        mRef = new Firebase(fireBaseDBURL);
+        mDataBaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(fireBaseDBURL);
+      //  mRef = new Firebase(fireBaseDBURL);
     }
 
     @Override
@@ -101,6 +107,7 @@ Uri downLoadUri = null;
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+      //  setRetainInstance(true);
     }
 
     @Override
@@ -108,10 +115,11 @@ Uri downLoadUri = null;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         profileView =  inflater.inflate(R.layout.fragment_image_profile, container, false);
+        Log.d("TAG","OnCreateView().....");
         initFireBaseURL();
         initViews(profileView);
         registerListeners();
-        mRef.addValueEventListener(new ValueEventListener() {
+       /* mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Getting the data from snapshot
@@ -123,7 +131,7 @@ Uri downLoadUri = null;
             public void onCancelled(FirebaseError firebaseError) {
 
             }
-        });
+        });*/
         return  profileView;
     }
 
@@ -174,8 +182,8 @@ Uri downLoadUri = null;
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.submit_form:
-                Profile userProfile = prepareData();
-                postToFireBase(userProfile);
+                postData();
+
                 break;
             case R.id.image_firebase:
                 requestPermissions( new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
@@ -192,14 +200,24 @@ private void launchGallery(){
     galleryIntent.setType("image/*");
     startActivityForResult(galleryIntent,GALLER_INTENT);
 }
+
+    private void postData(){
+
+
+        uploadImage();
+
+
+     //   progressDialog.dismiss();
+    }
     private void postToFireBase(Profile profile){
-        progressDialog.setMessage("Posting...");
-        progressDialog.show();
          if(profile!=null){
-             mRef.setValue(profile);
-             progressDialog.dismiss();
+             mDataBaseReference.setValue(profile);
              Toast.makeText(getActivity(),"Posted Data::",Toast.LENGTH_LONG).show();
          }
+
+        if(progressDialog.isShowing()){
+            progressDialog.dismiss();
+        }
 
     }
 
@@ -222,36 +240,153 @@ private void launchGallery(){
 
     }
 
+    private Profile prepareProfileData(){
+        Profile profile  = new Profile();
+        if(!TextUtils.isEmpty(fname.getText().toString())){
+            profile.setFname(fname.getText().toString());
+        }else{
+            profile.setFname("");
+        }
+        if(!TextUtils.isEmpty(mName.getText().toString())){
+            profile.setMname(mName.getText().toString());
+        }else{
+            profile.setMname("");
+        }
+
+        if(!TextUtils.isEmpty(lname.getText().toString())){
+            profile.setLname(lname.getText().toString());
+        }else{
+            profile.setLname("");
+        }
+        if(!TextUtils.isEmpty(addr1.getText().toString())){
+            profile.setAddr1(addr1.getText().toString());
+        }else{
+            profile.setAddr1("");
+        }
+        if(!TextUtils.isEmpty(addr1.getText().toString())){
+            profile.setAddr1(addr1.getText().toString());
+        }else{
+            profile.setAddr1("");
+        }
+
+        if(!TextUtils.isEmpty(addr2.getText().toString())){
+            profile.setAddr2(addr2.getText().toString());
+        }else{
+            profile.setAddr2("");
+        }
+
+        if(!TextUtils.isEmpty(addr2.getText().toString())){
+            profile.setAddr2(addr2.getText().toString());
+        }else{
+            profile.setAddr2("");
+        }
+
+        profile.setAge("32");
+        profile.setCountry("IND");
+        profile.setState("AP");
+        profile.setDob("17021984");
+
+        if(!TextUtils.isEmpty(zipcode.getText().toString())){
+            profile.setZipcode(zipcode.getText().toString());
+        }else{
+            profile.setZipcode("");
+        }
+
+        if(!TextUtils.isEmpty(mobile1.getText().toString())){
+            profile.setMobile(mobile1.getText().toString());
+        }else{
+            profile.setMobile("");
+        }
+
+
+        if(!TextUtils.isEmpty(mobile2.getText().toString())){
+            profile.setMobile2(mobile2.getText().toString());
+        }else{
+            profile.setMobile2("");
+        }
+
+
+        if(!TextUtils.isEmpty(email.getText().toString())){
+            profile.setEmail(email.getText().toString());
+        }else{
+            profile.setEmail("");
+        }
+
+        if(downLoadUri!=null){
+            profile.setDownloadURI(downLoadUri.toString());
+        }else{
+            profile.setDownloadURI("");
+        }
+        return  profile;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GALLER_INTENT && resultCode== AppCompatActivity.RESULT_OK){
-            progressDialog.setMessage("uploading...");
-            progressDialog.show();
-                Uri uri = data.getData();
-                StorageReference filePath = mstoreRef.child("ProfilePhotos").child(uri.getLastPathSegment());
-                filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        Toast.makeText(getActivity(),"Profile Upload Done...",Toast.LENGTH_LONG).show();
-                        downLoadUri = taskSnapshot.getDownloadUrl();
-                        Glide.with(ProfileWithImageFragment.this).load(downLoadUri)
-                                //.override(200, 200)
-                                //.fitCenter()
-                               .centerCrop()
-                                .into(fireBaseImg_btn);
-                        progressDialog.dismiss();
+                 uri = data.getData();
+           fireBaseImg_btn.setImageURI(uri);
 
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                      Log.d("TAG","Upload Exception....."+e);
-                        progressDialog.dismiss();
-                    }
-                });
+     //       fireBaseImg_btn.setFocusable(true);
+           /* fname.requestFocus();
+            InputMethodManager mgr =      (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            mgr.showSoftInput(fname, InputMethodManager.SHOW_IMPLICIT);*/
+           /* Glide.with(ProfileWithImageFragment.this).load(uri)
+                    //.override(200, 200)
+                    //.fitCenter()
+                    .centerCrop()
+                    .into(fireBaseImg_btn);*/
+
+
         }
+    }
+
+    private void uploadImage(){
+        progressDialog.setMessage("Posting data...");
+        progressDialog.show();
+        if(uri!=null){
+
+        StorageReference filePath = mstoreRef.child("ProfilePhotos").child(uri.getLastPathSegment());
+        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                Toast.makeText(getActivity(),"Profile Upload Done...",Toast.LENGTH_LONG).show();
+                downLoadUri = taskSnapshot.getDownloadUrl();
+
+                Profile userProfile =  prepareProfileData();//prepareData();
+                postToFireBase(userProfile);
+
+                Glide.with(ProfileWithImageFragment.this).load(downLoadUri)
+                        //.override(200, 200)
+                        //.fitCenter()
+                        .centerCrop()
+                        .into(fireBaseImg_btn);
+            //    progressDialog.dismiss();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TAG","Upload Exception....."+e);
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d("TAG","OnDestroyView()");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("TAG","OnDestroy");
     }
 
     @Override
