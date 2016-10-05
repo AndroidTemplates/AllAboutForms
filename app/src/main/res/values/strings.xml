@@ -54,4 +54,5 @@
     <string name="navigation_item_22">FireBaseLogin</string>
     <string name="prepopulate_firebase_form">Prepopulated</string>
     <string name="firebase_image_upload">ProfileImageUpload</string>
+    <string name="firebase_info">FireBaseFlow</string>
 </resources>

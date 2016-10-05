@@ -1,9 +1,8 @@
-package forms.formtemplates.Profile;
+package forms.formtemplates.FireBase;
 
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -16,27 +15,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.net.URI;
-
+import forms.formtemplates.Profile.Profile;
 import forms.formtemplates.R;
 
 /**
@@ -58,7 +52,7 @@ public class ProfileWithImageFragment extends Fragment implements View.OnClickLi
    // Firebase mRef;
     View profileView = null;
 
-    Button submit,dob;
+    Button submit,dob,logout;
     ProgressDialog progressDialog = null;
     EditText fname,mName,lname,age,addr1,addr2,mobile1,mobile2,email,zipcode;
     ImageButton fireBaseImg_btn;
@@ -71,7 +65,11 @@ public class ProfileWithImageFragment extends Fragment implements View.OnClickLi
     private static final int REQUEST_READ_STORAGE = 113;
     Uri downLoadUri = null;
     private DatabaseReference mDataBaseReference;
+    private FirebaseAuth firebaseAuth;
     Uri uri =null;
+    private String currentLoggedUserID = "";
+
+    private int mContainerID = -1;
     public ProfileWithImageFragment() {
         // Required empty public constructor
     }
@@ -97,6 +95,8 @@ public class ProfileWithImageFragment extends Fragment implements View.OnClickLi
     private  void initFireBaseURL(){
         mstoreRef = FirebaseStorage.getInstance().getReference();
         mDataBaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(fireBaseDBURL);
+        mDataBaseReference.keepSynced(true);
+        firebaseAuth = FirebaseAuth.getInstance();
       //  mRef = new Firebase(fireBaseDBURL);
     }
 
@@ -116,6 +116,7 @@ public class ProfileWithImageFragment extends Fragment implements View.OnClickLi
         // Inflate the layout for this fragment
         profileView =  inflater.inflate(R.layout.fragment_image_profile, container, false);
         Log.d("TAG","OnCreateView().....");
+        mContainerID = container.getId();
         initFireBaseURL();
         initViews(profileView);
         registerListeners();
@@ -171,18 +172,23 @@ public class ProfileWithImageFragment extends Fragment implements View.OnClickLi
         fireBaseImg_btn = (ImageButton)view.findViewById(R.id.image_firebase);
 
         dob = (Button) view.findViewById(R.id.dob);
+        logout = (Button) view.findViewById(R.id.logout);
     }
 
     private void registerListeners(){
         submit.setOnClickListener(this);
         fireBaseImg_btn.setOnClickListener(this);
+        logout.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.submit_form:
-                postData();
+                if(firebaseAuth.getCurrentUser()!=null) {
+                    currentLoggedUserID = firebaseAuth.getCurrentUser().getUid();
+                    postData();
+                }
 
                 break;
             case R.id.image_firebase:
@@ -192,9 +198,28 @@ public class ProfileWithImageFragment extends Fragment implements View.OnClickLi
                         REQUEST_WRITE_STORAGE);
 
                 break;
+            case R.id.logout:
+                performLogout();
+                break;
         }
     }
 
+    private  void performLogout(){
+        if(firebaseAuth.getCurrentUser()!=null) {
+            firebaseAuth.signOut();
+            launchLoginScreen();
+        }
+
+    }
+
+    private void launchLoginScreen(){
+        Fragment fireBaseLoginFragment = new FireBaseLoginFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(mContainerID, fireBaseLoginFragment)
+                //.addToBackStack(null)
+                .commit();
+
+    }
 private void launchGallery(){
     Intent galleryIntent = new Intent(Intent.ACTION_PICK);
     galleryIntent.setType("image/*");
@@ -211,8 +236,9 @@ private void launchGallery(){
     }
     private void postToFireBase(Profile profile){
          if(profile!=null){
-             mDataBaseReference.setValue(profile);
+             mDataBaseReference.push().setValue(profile);
              Toast.makeText(getActivity(),"Posted Data::",Toast.LENGTH_LONG).show();
+             launchProfileListScreen();
          }
 
         if(progressDialog.isShowing()){
@@ -220,6 +246,14 @@ private void launchGallery(){
         }
 
     }
+private void launchProfileListScreen(){
+        Fragment fireBaseDetailRecyclerViewFragment = new FireBaseDetailRecyclerViewFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(mContainerID, fireBaseDetailRecyclerViewFragment)
+                //   .addToBackStack(null)
+                .commit();
+}
+
 
     private Profile prepareData(){
         Profile profile = new Profile();
@@ -242,6 +276,11 @@ private void launchGallery(){
 
     private Profile prepareProfileData(){
         Profile profile  = new Profile();
+
+        if(!TextUtils.isEmpty(currentLoggedUserID)){
+            profile.setCurrentUserID(currentLoggedUserID);
+        }
+
         if(!TextUtils.isEmpty(fname.getText().toString())){
             profile.setFname(fname.getText().toString());
         }else{

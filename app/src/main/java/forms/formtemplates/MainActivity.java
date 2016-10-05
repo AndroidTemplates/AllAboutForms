@@ -19,17 +19,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import forms.formtemplates.FireBase.FireBaseInfoFragment;
 import forms.formtemplates.FireBase.FireBaseLoginFragment;
 import forms.formtemplates.FireBase.FireBaseRegistrationFragment;
 import forms.formtemplates.Login.FacebookTypeLoginFragment;
 import forms.formtemplates.Login.LoginType2Fragment;
 import forms.formtemplates.Login.LoginType3Fragment;
 import forms.formtemplates.Login.SimpleLoginFragment;
-import forms.formtemplates.Login.TwitterLoginFragment;
 import forms.formtemplates.Login.YahooTypeLoginFragment;
 import forms.formtemplates.Profile.ProfileFragment;
 import forms.formtemplates.Profile.ProfilePrepopulatedFragment;
-import forms.formtemplates.Profile.ProfileWithImageFragment;
 import forms.formtemplates.RegistrationTemplates.RegistrationFragment;
 import forms.formtemplates.SocialLogin.SocialLoginFragment;
 import forms.formtemplates.SocialLogin.SocialLoginType2Fragment;
@@ -195,11 +194,17 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.frag_parentLayout, profilePrepopulatedFragment)
                     .commit();
-        }else if(mSelectedId == R.id.firebase_profile_image_form){
+        }/*else if(mSelectedId == R.id.firebase_profile_image_form){
             mDrawerLayout.closeDrawer(GravityCompat.START);
             Fragment profileWithImageFragment = new ProfileWithImageFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.frag_parentLayout, profileWithImageFragment)
+                    .commit();
+        }*/else if(mSelectedId == R.id.firebase_info){
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            Fragment fireBaseInfoFragment = new FireBaseInfoFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frag_parentLayout, fireBaseInfoFragment)
                     .commit();
         }
     }

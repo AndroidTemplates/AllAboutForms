@@ -33,6 +33,7 @@ email
     private String mobile2;
     private String email;
     private String downloadURI;
+    private String currentUserID;
 
     public Profile(){
 
@@ -148,5 +149,13 @@ email
 
     public void setDownloadURI(String downloadURI) {
         this.downloadURI = downloadURI;
+    }
+
+    public String getCurrentUserID() {
+        return currentUserID;
+    }
+
+    public void setCurrentUserID(String currentUserID) {
+        this.currentUserID = currentUserID;
     }
 }

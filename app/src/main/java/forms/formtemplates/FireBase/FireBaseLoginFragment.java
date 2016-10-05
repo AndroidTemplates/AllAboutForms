@@ -17,6 +17,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import forms.formtemplates.FireBase.ProfileWithImageFragment;
 
 import forms.formtemplates.R;
 
@@ -40,6 +46,8 @@ public class FireBaseLoginFragment extends Fragment implements View.OnClickListe
     Button register,logout;
     ProgressDialog progressDialog;
     FirebaseAuth firebaseAuth;
+    DatabaseReference databaseReference;
+    private int mContainerId = -1;
     public FireBaseLoginFragment() {
         // Required empty public constructor
     }
@@ -77,19 +85,22 @@ public class FireBaseLoginFragment extends Fragment implements View.OnClickListe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fireBaseRegistrationView =  inflater.inflate(R.layout.fragment_fire_base_login, container, false);
+        mContainerId = container.getId();
         initView(fireBaseRegistrationView);
         registerListener();
-        if(checkForUserLogin()){
+     /*   if(checkForUserLogin()){
             logout.setVisibility(View.VISIBLE);
         }else{
             logout.setVisibility(View.INVISIBLE);
-        }
+        }*/
         return  fireBaseRegistrationView;
     }
 
 
     private  void initFireBaseAuth(){
         firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        databaseReference.keepSynced(true); //Stores data in offline
     }
     private  void initView(View v){
         progressDialog = new ProgressDialog(getActivity());
@@ -140,8 +151,10 @@ private boolean checkForUserLogin(){
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         progressDialog.dismiss();
+                      //  checkUserExists();
                         Toast.makeText(getActivity(),"Login Success",Toast.LENGTH_LONG).show();
-                        logout.setVisibility(View.VISIBLE);
+                        logout.setVisibility(View.GONE);
+                        launchProfileSetUp();
                     }else{
                         logout.setVisibility(View.INVISIBLE);
                         progressDialog.dismiss();
@@ -155,5 +168,53 @@ private boolean checkForUserLogin(){
         }
 
 
+    }
+
+    private void launchProfileSetUp(){
+        Fragment profileWithImageFragment = new ProfileWithImageFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(mContainerId, profileWithImageFragment)
+                //   .addToBackStack(null)
+                .commit();
+    }
+    private  void checkUserExists(){
+        if(firebaseAuth.getCurrentUser()!=null) {
+            final String user_id = firebaseAuth.getCurrentUser().getUid();
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(user_id)) {
+                       // launchFragmentInfo();
+                        launchSetUpFragment();
+                    } else {
+                          Toast.makeText(getActivity(),"User does not exist...",Toast.LENGTH_LONG).show();
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+
+    private void launchFragmentInfo(){
+        Fragment fireBaseInfoFragment = new FireBaseInfoFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(mContainerId, fireBaseInfoFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+
+    private void launchSetUpFragment(){
+        Fragment profileWithImageFrag = new ProfileWithImageFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(mContainerId, profileWithImageFrag)
+               // .addToBackStack(null)
+                .commit();
     }
 }

@@ -32,6 +32,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="3dp"
+                android:hint="Name">
+                <EditText android:layout_width="fill_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:paddingTop="20dp"
+                    android:background="@drawable/social_edit_text_style"
+                    android:textColor="#000000"
+                    android:paddingLeft="5dp"
+                    android:layout_marginTop="30dp"
+                    android:id="@+id/name_ed"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
                 android:hint="Email">
                 <EditText android:layout_width="fill_parent"
                     android:layout_height="60dp"

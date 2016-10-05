@@ -18,6 +18,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import forms.formtemplates.Profile.*;
 
 import forms.formtemplates.R;
 
@@ -37,12 +41,13 @@ public class FireBaseRegistrationFragment extends Fragment implements View.OnCli
     private String mParam2;
 
     View fireBaseRegistrationView = null;
-    EditText email,password;
+    EditText email,password,name;
     Button register;
     ProgressDialog progressDialog;
     FirebaseAuth firebaseAuth;
     TextView login;
     int mContainerId = -1;
+    private DatabaseReference mDataBaseReference;
     public FireBaseRegistrationFragment() {
         // Required empty public constructor
     }
@@ -89,6 +94,7 @@ public class FireBaseRegistrationFragment extends Fragment implements View.OnCli
 
     private  void initFireBaseAuth(){
         firebaseAuth = FirebaseAuth.getInstance();
+        mDataBaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
     }
     private  void initView(View v){
         progressDialog = new ProgressDialog(getActivity());
@@ -96,6 +102,7 @@ public class FireBaseRegistrationFragment extends Fragment implements View.OnCli
      password = (EditText)   v.findViewById(R.id.password_ed);
         register = (Button) v.findViewById(R.id.register);
         login = (TextView) v.findViewById(R.id.login_here);
+        name = (EditText) v.findViewById(R.id.name_ed);
     }
 
     private  void registerListener(){
@@ -120,14 +127,22 @@ private void launchLogin(){
     Fragment fireBaseLoginFragment = new FireBaseLoginFragment();
     getActivity().getSupportFragmentManager().beginTransaction()
             .replace(mContainerId, fireBaseLoginFragment)
-            .addToBackStack(null)
+          //  .addToBackStack(null)
             .commit();
 }
+
+    private void launchProfileSetUp(){
+        Fragment profileWithImageFragment = new ProfileWithImageFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(mContainerId, profileWithImageFragment)
+             //   .addToBackStack(null)
+                .commit();
+    }
     private  void register(){
         String emailId = email.getText().toString();
         String passwordForEmail  = password.getText().toString();
-
-        if(!TextUtils.isEmpty(emailId) && !TextUtils.isEmpty(passwordForEmail)){
+        final String nameForRegistration = name.getText().toString();
+        if(!TextUtils.isEmpty(emailId) && !TextUtils.isEmpty(passwordForEmail) && !TextUtils.isEmpty(nameForRegistration)){
                progressDialog.setMessage("Registering user....");
                progressDialog.show();
             firebaseAuth.createUserWithEmailAndPassword(emailId,passwordForEmail).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
@@ -135,6 +150,13 @@ private void launchLogin(){
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         progressDialog.dismiss();
+                        String userID =  firebaseAuth.getCurrentUser().getUid();
+                        DatabaseReference currentUserDBReference =    mDataBaseReference.child(userID);
+                        currentUserDBReference.child("name").setValue(nameForRegistration);
+                        currentUserDBReference.child("profileImg").setValue("abc");
+
+                        launchProfileSetUp();
+
                         Toast.makeText(getActivity(),"Registered Successfully",Toast.LENGTH_LONG).show();
                     }else{
 

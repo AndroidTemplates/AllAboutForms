@@ -28,6 +28,7 @@
                 android:layout_marginRight="5dp"
                 android:id="@+id/logout"
                 android:text="Logout"
+                android:visibility="gone"
                 android:textColor="#fff"
                 android:textSize="13dp"
                 android:background="@android:color/holo_purple"/>
